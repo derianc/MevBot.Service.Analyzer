@@ -19,7 +19,8 @@ namespace MevBot.Service.Analyzer
         private readonly IDatabase _redisDb;
 
         private readonly string _splTokenAddress;
-        private readonly string _redisQueueName = "solana_buy_queue";
+        private readonly string _redisQueueName = "solana_logs_queue";
+        private readonly string _redisBuyQueue = "solana_buy_queue";
         private readonly string _redisConnectionString;
 
         public Worker(ILogger<Worker> logger, IConfiguration configuration)
@@ -61,8 +62,8 @@ namespace MevBot.Service.Analyzer
                             _logger.LogInformation("{time} - Sandwich opportunity detected in message: {message}", DateTimeOffset.Now, logsNotification);
 
                             // push message to redis
-                            await _redisDb.ListLeftPushAsync(_redisQueueName, message);
-                            _logger.LogInformation("{time} - Pushed logsNotification to Redis queue: {queueName}", DateTimeOffset.Now, _redisQueueName);
+                            await _redisDb.ListLeftPushAsync(_redisBuyQueue, message);
+                            _logger.LogInformation("{time} - Pushed logsNotification to Redis queue: {queueName}", DateTimeOffset.Now, _redisBuyQueue);
 
                             // Additional processing logic for a sandwich opportunity can be added here.
                         }
