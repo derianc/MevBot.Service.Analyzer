@@ -70,7 +70,7 @@ namespace MevBot.Service.Analyzer
                     }
                     catch (Exception ex)
                     {
-                        _logger.LogError(ex, "{time} - Error processing message from Redis queue: {message}", DateTimeOffset.Now, message);
+                        _logger.LogError(ex, "{time} - Error processing message from Redis queue: {message}, {error}", DateTimeOffset.Now, message, ex.Message);
                     }
                 }
                 else
