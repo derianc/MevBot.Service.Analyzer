@@ -1,13 +1,6 @@
 using MevBot.Service.Analyzer.models;
 using StackExchange.Redis;
 using System.Text.Json;
-using System.Threading;
-using System.Threading.Tasks;
-using Microsoft.Extensions.Hosting;
-using Microsoft.Extensions.Logging;
-using Microsoft.Extensions.Configuration;
-using System;
-using System.Linq;
 
 namespace MevBot.Service.Analyzer
 {
@@ -81,7 +74,8 @@ namespace MevBot.Service.Analyzer
         }
 
         /// <summary>
-        /// Analyzes the logs in the provided LogsNotificationResponse to determine if it is viable for a sandwich transaction.
+        /// Dynamically reads the current SPL token addresses from environment variables and
+        /// analyzes the logs to determine if a sandwich opportunity exists.
         /// </summary>
         /// <param name="logsNotification">The deserialized logs notification response from Solana.</param>
         /// <returns>True if the message meets criteria for a sandwich opportunity; otherwise, false.</returns>
@@ -94,14 +88,26 @@ namespace MevBot.Service.Analyzer
 
             var logs = logsNotification.@params.result.value.logs;
 
-            // Example criteria for sandwich opportunity:
-            // 1. The logs should contain the SPL token address.
-            // 2. The logs should contain indicators of a swap transaction (e.g., the keyword "swap").
-            bool containsSplToken = logs.Any(log => log.Contains(_splTokenAddress, StringComparison.OrdinalIgnoreCase));
+            // Split into individual tokens and trim whitespace.
+            var tokenList = _splTokenAddress
+                                .Split(new[] { ',' }, StringSplitOptions.RemoveEmptyEntries)
+                                .Select(token => token.Trim())
+                                .ToList();
+
+            // If no tokens are provided, return false.
+            if (!tokenList.Any())
+            {
+                return false;
+            }
+
+            // Check if any token from the list appears in the logs.
+            bool containsSplToken = tokenList.Any(token => logs.Any(log => log.Contains(token, StringComparison.OrdinalIgnoreCase)));
+
+            // Also check that the logs contain the keyword "swap".
             bool containsSwap = logs.Any(log => log.Contains("swap", StringComparison.OrdinalIgnoreCase));
 
-            // Additional logic can be implemented to further analyze slippage, compute units, etc.
             return containsSplToken && containsSwap;
         }
     }
+}
 }
