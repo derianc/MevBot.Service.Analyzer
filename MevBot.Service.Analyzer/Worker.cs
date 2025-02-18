@@ -19,7 +19,7 @@ namespace MevBot.Service.Analyzer
         private readonly IDatabase _redisDb;
 
         private readonly string _splTokenAddress;
-        private readonly string _redisQueueName = "solana_logs_queue";
+        private readonly string _redisAnalyzeQueue = "solana_logs_queue";
         private readonly string _redisBuyQueue = "solana_buy_queue";
         private readonly string _redisConnectionString;
 
@@ -44,7 +44,7 @@ namespace MevBot.Service.Analyzer
             while (!stoppingToken.IsCancellationRequested)
             {
                 // Try to pop a message from the Redis queue.
-                RedisValue message = await _redisDb.ListRightPopAsync(_redisQueueName);
+                RedisValue message = await _redisDb.ListRightPopAsync(_redisAnalyzeQueue);
 
                 if (message.HasValue)
                 {
@@ -56,7 +56,7 @@ namespace MevBot.Service.Analyzer
                         // Log the message received.
                         _logger.LogInformation("{time} - Received message from Redis queue: {message}", DateTimeOffset.Now, message);
 
-                        // Analyze the logs for a viable sandwich transaction.
+                        // only process the message if it meets the criteria for a sandwich opportunity
                         if (IsSandwichOpportunity(logsNotification))
                         {
                             _logger.LogInformation("{time} - Sandwich opportunity detected in message: {message}", DateTimeOffset.Now, message);
@@ -66,10 +66,6 @@ namespace MevBot.Service.Analyzer
                             _logger.LogInformation("{time} - Pushed logsNotification to Redis queue: {queueName}", DateTimeOffset.Now, _redisBuyQueue);
 
                             // Additional processing logic for a sandwich opportunity can be added here.
-                        }
-                        else
-                        {
-                            //_logger.LogInformation("{time} - No viable sandwich opportunity detected in message.", DateTimeOffset.Now);
                         }
                     }
                     catch (Exception ex)
@@ -81,9 +77,6 @@ namespace MevBot.Service.Analyzer
                 {
                     _logger.LogDebug("{time} - No messages in Redis queue", DateTimeOffset.Now);
                 }
-
-                // Wait for 1 second before checking the queue again.
-                //await Task.Delay(1000, stoppingToken);
             }
         }
 
