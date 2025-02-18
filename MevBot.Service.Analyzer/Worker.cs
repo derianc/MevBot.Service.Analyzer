@@ -19,7 +19,7 @@ namespace MevBot.Service.Analyzer
         private readonly IDatabase _redisDb;
 
         private readonly string _splTokenAddress;
-        private readonly string _redisAnalyzeQueue = "solana_logs_queue";
+        private readonly string _redisAnalyzeQueue = "solana_analyze_queue";
         private readonly string _redisBuyQueue = "solana_buy_queue";
         private readonly string _redisConnectionString;
 
