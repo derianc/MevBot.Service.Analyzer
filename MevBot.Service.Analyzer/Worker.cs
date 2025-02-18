@@ -54,12 +54,12 @@ namespace MevBot.Service.Analyzer
                         var logsNotification = JsonSerializer.Deserialize<LogsNotificationResponse>(message);
 
                         // Log the message received.
-                        _logger.LogInformation("{time} - Received message from Redis queue: {message}", DateTimeOffset.Now, logsNotification);
+                        _logger.LogInformation("{time} - Received message from Redis queue: {message}", DateTimeOffset.Now, message);
 
                         // Analyze the logs for a viable sandwich transaction.
                         if (IsSandwichOpportunity(logsNotification))
                         {
-                            _logger.LogInformation("{time} - Sandwich opportunity detected in message: {message}", DateTimeOffset.Now, logsNotification);
+                            _logger.LogInformation("{time} - Sandwich opportunity detected in message: {message}", DateTimeOffset.Now, message);
 
                             // push message to redis
                             await _redisDb.ListLeftPushAsync(_redisBuyQueue, message);
