@@ -34,10 +34,12 @@ namespace MevBot.Service.Analyzer.extensions
             bool containsSplToken = tokenList.Any(token => logs.Any(log => log.Contains(token, StringComparison.OrdinalIgnoreCase)));
 
             // Also check that the logs contain the keyword "swap".
-            bool containsSwapOrBuy = logs.Any(log => log.Contains("swap", StringComparison.OrdinalIgnoreCase) ||
-                                                     log.Contains("buy", StringComparison.OrdinalIgnoreCase));
+            //bool containsSwapOrBuy = logs.Any(log => log.Contains("swap", StringComparison.OrdinalIgnoreCase) ||
+            //                                         log.Contains("buy", StringComparison.OrdinalIgnoreCase));
 
-            return containsSplToken && containsSwapOrBuy;
+            bool containsSwap = logs.Any(log => log.Contains("swap", StringComparison.OrdinalIgnoreCase));
+
+            return containsSplToken && containsSwap;
         }
     }
 }
