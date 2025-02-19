@@ -2,7 +2,7 @@
 
 namespace MevBot.Service.Analyzer.models
 {
-    public class LogsNotificationResponse
+    public class SolanaTransaction
     {
         [JsonPropertyName("jsonrpc")]
         public string? jsonrpc { get; set; }

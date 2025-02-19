@@ -1,3 +1,4 @@
+using MevBot.Service.Analyzer.extensions;
 using MevBot.Service.Analyzer.models;
 using StackExchange.Redis;
 using System.Text.Json;
@@ -44,13 +45,13 @@ namespace MevBot.Service.Analyzer
                     try
                     {
                         // Deserialize the message into our LogsNotificationResponse object.
-                        var logsNotification = JsonSerializer.Deserialize<LogsNotificationResponse>(message);
+                        var solanaTransaction = JsonSerializer.Deserialize<LogsNotificationResponse>(message);
 
                         // Log the message received.
                         _logger.LogInformation("{time} - Received message from Redis queue: {message}", DateTimeOffset.Now, message);
 
                         // only process the message if it meets the criteria for a sandwich opportunity
-                        if (IsSandwichOpportunity(logsNotification))
+                        if (solanaTransaction != null && solanaTransaction.IsSandwichOpportunity(_splTokenAddress))
                         {
                             _logger.LogInformation("{time} - Sandwich opportunity detected in message: {message}", DateTimeOffset.Now, message);
 
@@ -71,42 +72,6 @@ namespace MevBot.Service.Analyzer
                     _logger.LogDebug("{time} - No messages in Redis queue", DateTimeOffset.Now);
                 }
             }
-        }
-
-        /// <summary>
-        /// Dynamically reads the current SPL token addresses from environment variables and
-        /// analyzes the logs to determine if a sandwich opportunity exists.
-        /// </summary>
-        /// <param name="logsNotification">The deserialized logs notification response from Solana.</param>
-        /// <returns>True if the message meets criteria for a sandwich opportunity; otherwise, false.</returns>
-        private bool IsSandwichOpportunity(LogsNotificationResponse logsNotification)
-        {
-            if (logsNotification == null || logsNotification.@params?.result?.value?.logs == null)
-            {
-                return false;
-            }
-
-            var logs = logsNotification.@params.result.value.logs;
-
-            // Split into individual tokens and trim whitespace.
-            var tokenList = _splTokenAddress
-                                .Split(new[] { ',' }, StringSplitOptions.RemoveEmptyEntries)
-                                .Select(token => token.Trim())
-                                .ToList();
-
-            // If no tokens are provided, return false.
-            if (!tokenList.Any())
-            {
-                return false;
-            }
-
-            // Check if any token from the list appears in the logs.
-            bool containsSplToken = tokenList.Any(token => logs.Any(log => log.Contains(token, StringComparison.OrdinalIgnoreCase)));
-
-            // Also check that the logs contain the keyword "swap".
-            bool containsSwap = logs.Any(log => log.Contains("swap", StringComparison.OrdinalIgnoreCase));
-
-            return containsSplToken && containsSwap;
         }
     }
 }
