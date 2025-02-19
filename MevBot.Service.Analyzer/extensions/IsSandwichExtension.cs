@@ -38,8 +38,9 @@ namespace MevBot.Service.Analyzer.extensions
             //                                         log.Contains("buy", StringComparison.OrdinalIgnoreCase));
 
             bool containsSwap = logs.Any(log => log.Contains("swap", StringComparison.OrdinalIgnoreCase));
+            bool containsBuy = logs.Any(log => log.Contains("buy", StringComparison.OrdinalIgnoreCase));
 
-            return containsSplToken && containsSwap;
+            return containsSplToken && (containsBuy || containsSwap);
         }
     }
 }
