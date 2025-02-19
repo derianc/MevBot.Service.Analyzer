@@ -45,7 +45,7 @@ namespace MevBot.Service.Analyzer
                     try
                     {
                         // Deserialize the message into our LogsNotificationResponse object.
-                        var solanaTransaction = JsonSerializer.Deserialize<LogsNotificationResponse>(message);
+                        var solanaTransaction = JsonSerializer.Deserialize<SolanaTransaction>(message);
 
                         // Log the message received.
                         _logger.LogInformation("{time} - Received message from Redis queue: {message}", DateTimeOffset.Now, message);
