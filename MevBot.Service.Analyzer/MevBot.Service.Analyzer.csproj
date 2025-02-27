@@ -17,13 +17,7 @@
   </ItemGroup>
 
   <ItemGroup>
-    <Reference Include="MevBot.Service.Data">
-      <HintPath>..\..\MevBot.Service\MevBot.Service.Data\bin\Debug\net6.0\MevBot.Service.Data.dll</HintPath>
-      <Private>True</Private>
-    </Reference>
-    <Reference Include="MevBot.Service.Redis">
-      <HintPath>..\..\MevBot.Service\MevBot.Service.Redis\bin\Debug\net6.0\MevBot.Service.Redis.dll</HintPath>
-      <Private>True</Private>
-    </Reference>
+    <ProjectReference Include="..\..\MevBot.Service\MevBot.Service.Data\MevBot.Service.Data.csproj" />
+    <ProjectReference Include="..\..\MevBot.Service\MevBot.Service.Redis\MevBot.Service.Redis.csproj" />
   </ItemGroup>
 </Project>
