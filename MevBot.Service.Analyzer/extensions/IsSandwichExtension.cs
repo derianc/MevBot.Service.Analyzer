@@ -1,4 +1,4 @@
-﻿using MevBot.Service.Analyzer.models;
+﻿using MevBot.Service.Data;
 
 namespace MevBot.Service.Analyzer.extensions
 {
@@ -26,17 +26,12 @@ namespace MevBot.Service.Analyzer.extensions
 
             // If no tokens are provided, return false.
             if (!tokenList.Any())
-            {
                 return false;
-            }
 
             // Check if any token from the list appears in the logs.
             bool containsSplToken = tokenList.Any(token => logs.Any(log => log.Contains(token, StringComparison.OrdinalIgnoreCase)));
 
-            // Also check that the logs contain the keyword "swap".
-            //bool containsSwapOrBuy = logs.Any(log => log.Contains("swap", StringComparison.OrdinalIgnoreCase) ||
-            //                                         log.Contains("buy", StringComparison.OrdinalIgnoreCase));
-
+            // Check that the logs contain the keyword "swap" or "buy".
             bool containsSwap = logs.Any(log => log.Contains("swap", StringComparison.OrdinalIgnoreCase));
             bool containsBuy = logs.Any(log => log.Contains("buy", StringComparison.OrdinalIgnoreCase));
 

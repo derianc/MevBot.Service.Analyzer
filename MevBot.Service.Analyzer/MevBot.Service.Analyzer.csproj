@@ -11,6 +11,17 @@
   <ItemGroup>
     <PackageReference Include="Microsoft.Extensions.Hosting" Version="6.0.1" />
     <PackageReference Include="Microsoft.VisualStudio.Azure.Containers.Tools.Targets" Version="1.21.0" />
+    <PackageReference Include="Newtonsoft.Json" Version="13.0.3" />
+    <PackageReference Include="Solnet.Rpc" Version="6.1.0" />
     <PackageReference Include="StackExchange.Redis" Version="2.8.24" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Reference Include="MevBot.Service.Data">
+      <HintPath>..\..\MevBot.Service\MevBot.Service.Data\bin\Debug\net6.0\MevBot.Service.Data.dll</HintPath>
+    </Reference>
+    <Reference Include="MevBot.Service.Redis">
+      <HintPath>..\..\MevBot.Service\MevBot.Service.Redis\bin\Debug\net6.0\MevBot.Service.Redis.dll</HintPath>
+    </Reference>
   </ItemGroup>
 </Project>
