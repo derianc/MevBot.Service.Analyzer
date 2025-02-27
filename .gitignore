@@ -28,6 +28,9 @@ x86/
 [Aa][Rr][Mm]64/
 bld/
 [Bb]in/
+# Re-include specific external DLLs from the Analyzer project’s bin folder:
+!MevBot.Service.Analyzer/bin/Debug/net6.0/MevBot.Service.Data.dll
+!MevBot.Service.Analyzer/bin/Debug/net6.0/MevBot.Service.Redis.dll
 [Oo]bj/
 [Ll]og/
 [Ll]ogs/

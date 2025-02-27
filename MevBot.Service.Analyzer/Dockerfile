@@ -10,12 +10,6 @@ FROM mcr.microsoft.com/dotnet/sdk:6.0 AS build
 ARG BUILD_CONFIGURATION=Release
 WORKDIR /src
 COPY ["MevBot.Service.Analyzer/MevBot.Service.Analyzer.csproj", "MevBot.Service.Analyzer/"]
-
-# Copy external DLLs into the Analyzer project folder so that the HintPaths work.
-# (This assumes the external DLLs are in the "MevBot.Service" folder at the repo root.)
-COPY ["MevBot.Service/MevBot.Service.Data/*.dll", "MevBot.Service.Analyzer/"]
-COPY ["MevBot.Service/MevBot.Service.Redis/*.dll", "MevBot.Service.Analyzer/"]
-
 RUN dotnet restore "./MevBot.Service.Analyzer/MevBot.Service.Analyzer.csproj"
 COPY . .
 WORKDIR "/src/MevBot.Service.Analyzer"
