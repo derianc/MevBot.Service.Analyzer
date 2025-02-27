@@ -17,7 +17,7 @@
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\..\MevBot.Service\MevBot.Service.Data\MevBot.Service.Data.csproj" />
-    <ProjectReference Include="..\..\MevBot.Service\MevBot.Service.Redis\MevBot.Service.Redis.csproj" />
+    <ProjectReference Include="..\MevBot.Service.Data\MevBot.Service.Data.csproj" />
+    <ProjectReference Include="..\MevBot.Service.Redis\MevBot.Service.Redis.csproj" />
   </ItemGroup>
 </Project>
