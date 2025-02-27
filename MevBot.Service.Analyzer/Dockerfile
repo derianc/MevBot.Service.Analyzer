@@ -25,6 +25,3 @@ FROM base AS final
 WORKDIR /app
 COPY --from=publish /app/publish .
 ENTRYPOINT ["dotnet", "MevBot.Service.Analyzer.dll"]
-
-COPY bin/Debug/net6.0/MevBot.Service.Data.dll .
-COPY bin/Debug/net6.0/MevBot.Service.Redis.dll .
