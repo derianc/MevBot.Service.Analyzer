@@ -1,5 +1,4 @@
 using MevBot.Service.Analyzer.extensions;
-using MevBot.Service.Analyzer.services.interfaces;
 using MevBot.Service.Data;
 using StackExchange.Redis;
 using System.Text.Json;
@@ -49,11 +48,6 @@ namespace MevBot.Service.Analyzer
                         // Deserialize the message into our LogsNotificationResponse object.
                         var solanaTransaction = JsonSerializer.Deserialize<SolanaTransaction>(message);
 
-                        // Log the message received.
-                        //_logger.LogInformation("{time} - Received message from Redis queue: {message}", DateTimeOffset.Now, message);
-                        var tradeData = new TradeData();
-                        tradeData.ExchangeMarketAddress = ExtracMarketAddress(solanaTransaction);
-                                                
                         // only process the message if it meets the criteria for a sandwich opportunity
                         if (solanaTransaction != null && solanaTransaction.IsSandwichOpportunity(_splTokenAddress))
                         {
